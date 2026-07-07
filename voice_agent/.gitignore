@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+.env
+
+# Logs
+*.log
+logs/
+
+# Temporary audio files
+backend/temp_audio/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Whisper model cache
+~/.cache/huggingface/

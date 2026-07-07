@@ -1,0 +1,26 @@
+# FastAPI & Server
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+
+# AI & Speech
+faster-whisper==1.0.3
+requests==2.32.3
+
+# Language Detection
+langdetect==1.0.9
+
+# Google Gemini API
+google-generativeai==0.8.3
+
+# Utilities
+python-dotenv==1.0.1
+loguru==0.7.2
+aiofiles==23.2.1
+pydantic==2.7.1
+pydantic-settings==2.2.1
+
+# Future-ready (Stage 2)
+# sentence-transformers==3.0.1
+# scikit-learn==1.5.0
+# numpy==1.26.4
