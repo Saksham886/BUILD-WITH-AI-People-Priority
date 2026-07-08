@@ -1,3 +1,48 @@
+# Build with AI — Citizen Grievance Pipeline
+
+This repo now hosts all three stages of the **"Build with AI"** citizen-grievance pipeline
+side by side, plus a single unified frontend that ties them together end-to-end:
+
+| Stage | Folder | What it does |
+|-------|--------|---------------|
+| 1 — Ingestion | `voice_agent/` | Normalizes a voice/text complaint (any Indian language) into a canonical problem statement. |
+| 2 — Aggregation | `backend/`, `frontend/` | Embeds + clusters complaints into Master Incidents ranked by priority. **The unified frontend lives here.** |
+| 3 — Action | `letter_service/` | Turns a Master Incident into a formal grievance letter + downloadable PDF. |
+
+`voice_agent/frontend` is kept as the original standalone reference app (and as the
+source of the dark "glass" visual design), but day-to-day use goes through the unified
+`frontend/` app below, which has an **Intake** page (Stage 1) and a **Dashboard** page
+(Stage 2) with a **Generate Letter** action per incident (Stage 3) — real data flows
+between all three, not just shared styling.
+
+## Running all three backends
+
+Each backend is independent (own venv/dependencies) — start them on distinct ports:
+
+```bash
+# Stage 2 — aggregation backend (this repo's own backend/)
+cd backend && uvicorn app.main:app --reload --port 8000
+
+# Stage 1 — voice_agent backend
+cd voice_agent/backend && uvicorn app.main:app --reload --port 8001
+
+# Stage 3 — letter_service
+cd letter_service && uvicorn main:app --reload --port 8002
+```
+
+Then run the unified frontend (proxies `/api` → 8000, `/voice-api` → 8001,
+`/letters-api` → 8002 — see `frontend/vite.config.js`):
+
+```bash
+cd frontend && npm install && npm run dev
+```
+
+Open http://localhost:5173 — **Intake** submits a grievance through Stage 1 and forwards
+it into Stage 2's cluster list; **Dashboard** shows Master Incidents and lets you generate
+a Stage 3 letter/PDF for any of them.
+
+---
+
 # Stage 2 — Aggregation (Semantic Text Clustering & Counting)
 
 Part of the **"Build with AI"** 3-stage citizen-grievance pipeline

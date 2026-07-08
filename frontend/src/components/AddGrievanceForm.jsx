@@ -1,4 +1,6 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { BsSendFill } from "react-icons/bs";
 import { addGrievance } from "../api";
 
 const EMPTY = {
@@ -21,7 +23,6 @@ const CATEGORIES = [
 export default function AddGrievanceForm({ onAdded }) {
   const [form, setForm] = useState(EMPTY);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(null);
 
   const update = (key) => (e) => setForm({ ...form, [key]: e.target.value });
 
@@ -29,7 +30,6 @@ export default function AddGrievanceForm({ onAdded }) {
     e.preventDefault();
     if (!form.summary.trim()) return;
     setBusy(true);
-    setError(null);
     try {
       await addGrievance({
         ...form,
@@ -38,18 +38,15 @@ export default function AddGrievanceForm({ onAdded }) {
       setForm(EMPTY);
       onAdded?.();
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message || "Failed to add grievance.");
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <form
-      onSubmit={submit}
-      className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
-    >
-      <h2 className="mb-3 text-sm font-semibold text-slate-700">
+    <form onSubmit={submit} className="glass-card" style={{ padding: "24px" }}>
+      <h2 style={{ marginBottom: "16px", fontSize: "1rem", fontWeight: 700, color: "var(--text-secondary)" }}>
         Add a citizen grievance
       </h2>
 
@@ -58,48 +55,39 @@ export default function AddGrievanceForm({ onAdded }) {
         onChange={update("summary")}
         placeholder="Summary of the complaint (this text is embedded & clustered)…"
         rows={3}
-        className="w-full resize-none rounded-lg border border-slate-300 p-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+        className="complaint-textarea"
+        style={{ minHeight: "100px", fontSize: "1rem" }}
       />
 
-      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <select
-          value={form.category}
-          onChange={update("category")}
-          className="rounded-lg border border-slate-300 p-2 text-sm outline-none focus:border-indigo-500"
-        >
+      <div style={{ marginTop: "16px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+        <select value={form.category} onChange={update("category")} className="form-input" style={{ fontSize: "0.95rem", padding: "13px 14px" }}>
           {CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
+            <option key={c} value={c}>{c}</option>
           ))}
         </select>
 
-        <select
-          value={form.urgency}
-          onChange={update("urgency")}
-          className="rounded-lg border border-slate-300 p-2 text-sm outline-none focus:border-indigo-500"
-        >
+        <select value={form.urgency} onChange={update("urgency")} className="form-input" style={{ fontSize: "0.95rem", padding: "13px 14px" }}>
           <option value="High">High</option>
           <option value="Medium">Medium</option>
           <option value="Low">Low</option>
         </select>
-
-        <input
-          value={form.location}
-          onChange={update("location")}
-          placeholder="Location"
-          className="rounded-lg border border-slate-300 p-2 text-sm outline-none focus:border-indigo-500"
-        />
       </div>
 
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      <input
+        value={form.location}
+        onChange={update("location")}
+        placeholder="Location"
+        className="form-input"
+        style={{ marginTop: "14px", fontSize: "0.95rem", padding: "13px 14px" }}
+      />
 
       <button
         type="submit"
+        className="btn-primary"
         disabled={busy || !form.summary.trim()}
-        className="mt-3 w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+        style={{ marginTop: "18px", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
       >
-        {busy ? "Adding…" : "Add & re-cluster"}
+        <BsSendFill /> {busy ? "Adding…" : "Add & re-cluster"}
       </button>
     </form>
   );
