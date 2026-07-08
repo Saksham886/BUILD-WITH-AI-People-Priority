@@ -12,17 +12,17 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": {
-        target: "http://localhost:8000",
+        target: "https://build-with-ai-people-priority.onrender.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
       "/voice-api": {
-        target: "http://localhost:8001",
+        target: "https://voice-agent-ynrq.onrender.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/voice-api/, ""),
       },
       "/letters-api": {
-        target: "http://localhost:8002",
+        target: "https://letter-service.onrender.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/letters-api/, ""),
       },
