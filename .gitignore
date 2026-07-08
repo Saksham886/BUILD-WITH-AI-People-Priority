@@ -11,3 +11,8 @@ frontend/dist/
 
 # Misc
 .DS_Store
+
+letter_service/__pycache__
+letter_service/.env
+
+.venv
